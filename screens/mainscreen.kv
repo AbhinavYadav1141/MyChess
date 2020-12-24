@@ -1,0 +1,19 @@
+#: import Window kivy.core.window.Window
+
+
+<MainScreen>:
+    name: "mainscreen"
+    BoxLayout:
+        orientation: "vertical"
+        Button:
+            id: online_button
+            text: "Play Online"
+            on_press:
+                root.start_online(self, offline_button)
+
+        Button:
+            id: offline_button
+            text: "Play Offline"
+            on_press:
+                root.start_offline(self)
+

@@ -1,0 +1,86 @@
+#: import Window kivy.core.window.Window
+
+
+<Block>:
+    canvas.before:
+        Rectangle:
+            source: self.source
+            pos: self.pos
+            size: self.size
+
+
+<GameScreen>:
+    name: "gamescreen"
+    board: board
+    FloatLayout:
+        id: mainlayout
+        board: board
+        BoxLayout:
+            id: mainbox
+            orientation: "vertical" if Window.height > Window.width else "horizontal"
+
+            BoxLayout:
+                orientation: "horizontal" if Window.height > Window.width else "vertical"
+                Button:
+                    text: "START"
+                    on_press: board.start(self)
+
+            BoxLayout:
+                id: game
+                orientation: "vertical"
+                size_hint: (None, None)
+                height: min(Window.height, Window.width)
+                width: self.height
+
+                BoxLayout:
+                    size_hint_y: .9
+                    BoxLayout:
+                        id: rank
+                        orientation: "vertical"
+                        size_hint_x: .1
+                        Label:
+                            text: "8"
+                        Label:
+                            text: "7"
+                        Label:
+                            text: "6"
+                        Label:
+                            text: "5"
+                        Label:
+                            text: "4"
+                        Label:
+                            text: "3"
+                        Label:
+                            text: "2"
+                        Label:
+                            text: "1"
+                    ChessLayout:
+                        id: board
+                        mainlayout: mainlayout
+
+                BoxLayout:
+                    id: file
+                    size_hint_y: .1
+                    size_hint_x: None
+                    width: game.width * .9
+                    pos_hint: {"right": 1}
+
+                    Label:
+                        text: "a"
+                    Label:
+                        text: "b"
+                    Label:
+                        text: "c"
+                    Label:
+                        text: "d"
+                    Label:
+                        text: "e"
+                    Label:
+                        text: "f"
+                    Label:
+                        text: "g"
+                    Label:
+                        text: "h"
+
+
+            BoxLayout:

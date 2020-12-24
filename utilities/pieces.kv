@@ -1,0 +1,22 @@
+<Piece>:
+    size_hint: (None, None)
+    canvas:
+        Color:
+            rgb: (1, 1, 1)
+        Rectangle:
+            source: "" if self.parent == None else self.path[self.variety][self.color][self.ptype]
+            pos: self.pos
+            size: self.size
+
+<Dot>:
+    block: "" if self.parent == None else eval(f"self.parent.board.{self.position}")
+    size_hint: (None, None)
+    canvas:
+        Color:
+            rgb: (0, 0, 1)
+        Ellipse:
+            size: self.size
+            pos: self.pos
+
+    size: (10, 10) if self.parent == None else (self.block.size[0]/5, self.block.size[1]/5)
+    center: (0, 0) if self.parent == None else (self.block.center)

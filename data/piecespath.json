@@ -1,0 +1,44 @@
+{
+  "1": 
+  {
+    "white": 
+    {
+      "king": "assets/images/k1.png",
+      "queen": "assets/images/q1.png",
+      "bishop": "assets/images/b1.png",
+      "knight": "assets/images/n1.png",
+      "rook": "assets/images/r1.png",
+      "pawn": "assets/images/p1.png"
+    },
+    "black": 
+    {
+      "king": "assets/images/k2.png",
+      "queen": "assets/images/q2.png",
+      "bishop": "assets/images/b2.png",
+      "knight": "assets/images/n2.png",
+      "rook": "assets/images/r2.png",
+      "pawn": "assets/images/p2.png"
+    }
+  },
+  "2": 
+  {
+    "white":
+    {
+      "king": "assets/images/KingWhite.png",
+      "queen": "assets/images/QueenWhite.png",
+      "bishop": "assets/images/BishopWhite.png",
+      "knight": "assets/images/KnightWhite.png",
+      "rook": "assets/images/RookWhite.png",
+      "pawn": "assets/images/PawnWhite.png"
+    },
+    "black":
+    {
+      "king": "assets/images/KingBlack.png",
+      "queen": "assets/images/QueenBlack.png",
+      "bishop": "assets/images/BishopBlack.png",
+      "knight": "assets/images/KnightBlack.png",
+      "rook": "assets/images/RookBlack.png",
+      "pawn": "assets/images/PawnBlack.png"
+    }
+  }
+}
