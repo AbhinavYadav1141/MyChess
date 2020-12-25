@@ -3,6 +3,7 @@
 
 <PieceButton@Button>:
     path: ""
+    height: self.width
     canvas:
         Rectangle:
             source: "" if self.parent == None else self.path
@@ -11,6 +12,10 @@
 
 
 <PromotionPopup>:
+    size_hint: (None, None)
+    width: Window.width * .9
+    height: self.width/2 if Window.height>Window.width else self.width/3
+    title: "Promote !"
     BoxLayout:
         PieceButton:
             id: qweenw
