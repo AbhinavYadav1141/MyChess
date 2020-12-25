@@ -6,21 +6,12 @@ from kivy.lang import Builder
 Builder.load_file("utilities/popups.kv")
 
 
-class PromotionPopupW(Popup):
-
-    def __init__(self, command, move, i, **kwargs):
-        super().__init__(**kwargs)
+class Data:
+    def __init__(self, move, piece):
         self.auto_dismiss = False
-        self.command = command
         self.move = move
-        self.i = i
+        self.piece = piece
 
 
-class PromotionPopupB(Popup):
-
-    def __init__(self, command, move, i, **kwargs):
-        super().__init__(**kwargs)
-        self.auto_dismiss = False
-        self.command = command
-        self.move = move
-        self.i = i
+class PromotionPopup(Popup, Data):
+    pass
