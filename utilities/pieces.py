@@ -1,7 +1,6 @@
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.lang import Builder
-from utilities.popups import PromotionPopupW, PromotionPopupB
 import chess
 from kivy.clock import Clock
 
@@ -36,7 +35,7 @@ class Piece(Widget):
         self._position = position
         if self.parent is not None:
             self.change()
-
+    '''
     def on_touch_down(self, touch):
         app = App.get_running_app()
         board: chess.Board = app.board
@@ -75,12 +74,23 @@ class Piece(Widget):
                     self.remove_dots()
                     # print(self.pos)
             super().on_touch_down(touch)
-
+'''
     def change(self, *args):
         if self.parent is not None:
             block = eval(f"self.parent.board.{self.position}")
             self.pos = block.pos
             self.size = block.size
+
+    def move(self, mv):
+        app = App.get_running_app()
+        parent = self.parent
+        board = app.board
+        board.push_san(mv)
+        piece = parent.board.piece_at(mv[2:4])
+        if piece is not None:
+            parent.board.pieces.remove(piece)
+            parent.remove_widget(piece)
+        self.position = mv[2:4]
 
     def add_dots(self):
         app = App.get_running_app()
@@ -99,22 +109,18 @@ class Piece(Widget):
         for i in self.dots:
             self.dots.remove(i)
 
-    def promote(self, piece2, move, i):
+    def promote(self, piece2, move):
         board = App.get_running_app().board
         parent = self.parent
         move += "n" if piece2 == 'knight' else piece2[0]
         # self.ptype = piece
 
-        piece = parent.board.piece_at(i.name)
-        board.push_san(move)
-        if piece is not None:
-            parent.board.pieces.remove(piece)
-            parent.remove_widget(piece)
+        self.move(move)
 
         parent.board.pieces.remove(self)
         parent.remove_widget(self)
 
-        parent.board.add_piece(self.color, i.name, piece2)
+        parent.board.add_piece(self.color, move[2:4], piece2, variety=self.variety)
 
 
 class Dot(Widget):

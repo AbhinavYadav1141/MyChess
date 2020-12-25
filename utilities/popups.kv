@@ -1,98 +1,39 @@
 #: import Window kivy.core.window.Window
 
-<QueenW@Button>:
-    canvas:
-        Rectangle:
-            source: "assets/images/q1.png"
-            size: self.size
-            pos: self.pos
 
-<QueenB@Button>:
+<PieceButton@Button>:
+    path: ""
     canvas:
         Rectangle:
-            source: "assets/images/q2.png"
-            size: self.size
-            pos: self.pos
-
-<RookW@Button>:
-    canvas:
-        Rectangle:
-            source: "assets/images/r1.png"
-            size: self.size
-            pos: self.pos
-
-<RookB@Button>:
-    canvas:
-        Rectangle:
-            source: "assets/images/r2.png"
-            size: self.size
-            pos: self.pos
-
-<KnightW@Button>:
-    canvas:
-        Rectangle:
-            source: "assets/images/n1.png"
-            size: self.size
-            pos: self.pos
-
-<KnightB@Button>:
-    canvas:
-        Rectangle:
-            source: "assets/images/n2.png"
-            size: self.size
-            pos: self.pos
-
-<BishopW@Button>:
-    canvas:
-        Rectangle:
-            source: "assets/images/b1.png"
-            size: self.size
-            pos: self.pos
-
-<BishopB@Button>:
-    canvas:
-        Rectangle:
-            source: "assets/images/b2.png"
+            source: "" if self.parent == None else self.path
             size: self.size
             pos: self.pos
 
 
-<PromotionPopupW>:
+<PromotionPopup>:
     BoxLayout:
-        QueenW:
+        PieceButton:
+            id: qweenw
+            path: root.piece.path[root.piece.variety][root.piece.color]['queen']
             on_press:
-                root.command("queen", root.move, root.i)
+                root.piece.promote("queen", root.move)
                 root.dismiss()
-        RookW:
+        PieceButton:
+            id: rookw
+            path: root.piece.path[root.piece.variety][root.piece.color]['rook']
             on_press:
-                root.command("rook", root.move, root.i)
+                root.piece.promote("rook", root.move)
                 root.dismiss()
-        KnightW:
+        PieceButton:
+            id: knightw
+            path: root.piece.path[root.piece.variety][root.piece.color]['knight']
             on_press:
-                root.command("knight", root.move, root.i)
+                root.piece.promote("knight", root.move)
                 root.dismiss()
-        BishopW:
+        PieceButton:
+            id: bishopw
+            path: root.piece.path[root.piece.variety][root.piece.color]['bishop']
             on_press:
-                root.command("bishop", root.move, root.i)
+                root.piece.promote("bishop", root.move)
                 root.dismiss()
         
-<PromotionPopupB>:
-    BoxLayout:
-        QueenB:
-            on_press:
-                root.command("queen", root.move, root.i)
-                root.dismiss()
-        RookB:
-            on_press:
-                root.command("rook", root.move, root.i)
-                root.dismiss()
-        KnightB:
-            on_press:
-                root.command("knight", root.move, root.i)
-                root.dismiss()
-        BishopB:
-            on_press:
-                root.command("bishop", root.move, root.i)
-                root.dismiss()
-
-            
