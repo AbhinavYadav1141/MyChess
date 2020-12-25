@@ -6,7 +6,7 @@ from kivy.properties import ObjectProperty
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.widget import Widget
 from utilities.pieces import Piece
-from utilities.popups import PromotionPopup
+from utilities.popups import PromotionPopup, ResultPopup
 
 
 class Data:
@@ -46,8 +46,8 @@ class ChessLayout(GridLayout):
         block = eval(f"self.{position}")
         pc.pos = block.pos
         pc.size = block.size
-        self.mainlayout.bind(pos=pc.change)
-        self.mainlayout.bind(size=pc.change)
+        # self.mainlayout.bind(pos=pc.change)
+        # self.mainlayout.bind(size=pc.change)
         # print("added")
 
     def start(self, btn):
@@ -57,7 +57,38 @@ class ChessLayout(GridLayout):
         for i in range(8):
             for j in (("white", '21'), ("black", '78')):
                 self.add_piece(j[0], chr(97 + i) + j[1][0], "pawn", variety)
-                self.add_piece(j[0], chr(97 + i)+j[1][1], ptype[i], variety)
+                self.add_piece(j[0], chr(97 + i) + j[1][1], ptype[i], variety)
+
+    def restart(self, btn):
+        btn.disabled = True
+        app = App.get_running_app()
+        app.board = chess.Board()
+        for i in self.pieces:
+            self.mainlayout.remove_widget(i)
+
+        ch = list(self.children)
+        for i in ch:
+            self.remove_widget(i)
+
+        for i in range(7, -1, -1):
+            for j in range(8):
+                name = f"{chr(97 + j)}{i + 1}"
+                exec(f"del self.{name}")
+
+        self.blocks = {}
+        self.pieces = []
+        self.active = False
+        self.active_piece = None
+
+        for i in range(7, -1, -1):
+            for j in range(8):
+                source = "assets/images/white.png" if (i + j) % 2 == 1 else "assets/images/black.png"
+                name = f"{chr(97 + j)}{i + 1}"
+                exec(f"self.{name}=Block(source=source, name=name)")
+                self.add_widget(eval(f"self.{name}"))
+                self.blocks[name] = eval(f"self.{name}")
+
+        self.start(btn)
 
     def piece_at(self, square):
         for i in self.pieces:
@@ -100,9 +131,39 @@ class ChessLayout(GridLayout):
                         PromotionPopup(move=move, piece=active_piece).open()
 
             active_piece.remove_dots()
+
+            gameover = self.gameover(board)
+            if gameover[0]:
+                ResultPopup(result=gameover[1], reason=gameover[2], restart=self.restart).open()
+
             self.active = False
             self.active_piece = None
         super().on_touch_down(touch)
+
+    def gameover(self, board):
+        reason = ""
+        result = ""
+        check = False
+        if board.is_game_over():
+            check = True
+            result = "0.5 - 0.5"
+            reason = "Unknown Reason"
+
+        if board.is_checkmate():
+            reason = "Checkmate"
+            result = "0-1" if board.turn else "1-0"
+        elif board.is_fivefold_repetition():
+            reason = "five fold repetition"
+        elif board.is_insufficient_material():
+            reason = "Insufficient material"
+        elif board.is_stalemate():
+            reason = "Stalemate"
+        elif board.is_seventyfive_moves():
+            reason = "Seventy Five Moves"
+        elif board.is_variant_draw():
+            reason = "Variant draw"
+
+        return check, result, reason
 
 
 class GameScreen(Screen):

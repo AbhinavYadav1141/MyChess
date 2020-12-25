@@ -41,4 +41,25 @@
             on_press:
                 root.piece.promote("bishop", root.move)
                 root.dismiss()
+
+
+<ResultPopup>:
+    title: "Result"
+    size_hint: (None, None)
+    height: min(Window.height, Window.width)*.8
+    width: self.height
+    BoxLayout:
+        orientation: "vertical"
+
+        Label:
+            text: "Game Over !!"
+        Label:
+            text: root.result
+        Label:
+            text: root.reason
+        Button:
+            text: "Restart"
+            on_release:
+                root.restart(self)
+                root.dismiss()
         

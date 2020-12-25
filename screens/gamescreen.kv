@@ -23,7 +23,7 @@
                 orientation: "horizontal" if Window.height > Window.width else "vertical"
                 Button:
                     text: "START"
-                    on_press: board.start(self)
+                    on_release: board.start(self)
 
             BoxLayout:
                 id: game
@@ -84,3 +84,9 @@
 
 
             BoxLayout:
+                Button:
+                    id: restart_btn
+                    text: "RESTART"
+                    on_release:
+                        board.restart(self)
+                        self.disabled = False

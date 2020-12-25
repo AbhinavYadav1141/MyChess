@@ -22,7 +22,7 @@ class Piece(Widget):
         self.position = position
         self.active = False
         self.dots = []
-        Clock.schedule_interval(self.change, 1)
+        Clock.schedule_interval(self.change, .1)
         # print("created")
 
     @property
@@ -84,7 +84,18 @@ class Piece(Widget):
     def move(self, mv):
         app = App.get_running_app()
         parent = self.parent
-        board = app.board
+        board: chess.Board = app.board
+        legal = board.legal_moves
+        move = None
+        for i in legal:
+            if str(i) == mv:
+                move = i
+                break
+        if board.is_castling(move):
+            if str(move)[-2] == 'c':
+                self.parent.board.piece_at('a' + str(move)[-1]).position = 'd' + str(move)[-1]
+            elif str(move)[-2] == 'g':
+                self.parent.board.piece_at('h' + str(move)[-1]).position = 'f' + str(move)[-1]
         board.push_san(mv)
         piece = parent.board.piece_at(mv[2:4])
         if piece is not None:
