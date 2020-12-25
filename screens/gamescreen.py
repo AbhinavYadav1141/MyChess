@@ -51,29 +51,13 @@ class ChessLayout(GridLayout):
         # print("added")
 
     def start(self, btn):
+        btn.disabled = True
+        ptype = ["rook", "knight", "bishop", "queen", "king", "bishop", "knight", "rook"]
         variety = '2'
         for i in range(8):
-            self.add_piece("white", chr(97 + i) + '2', "pawn", variety)
-        for i in range(8):
-            self.add_piece("black", chr(97 + i) + '7', "pawn", variety)
-        self.add_piece("white", 'a1', "rook", variety)
-        self.add_piece("white", 'b1', "knight", variety)
-        self.add_piece("white", 'c1', "bishop", variety)
-        self.add_piece("white", 'd1', "queen", variety)
-        self.add_piece("white", 'e1', "king", variety)
-        self.add_piece("white", 'f1', "bishop", variety)
-        self.add_piece("white", 'g1', "knight", variety)
-        self.add_piece("white", 'h1', "rook", variety)
-        self.add_piece("black", 'a8', "rook", variety)
-        self.add_piece("black", 'b8', "knight", variety)
-        self.add_piece("black", 'c8', "bishop", variety)
-        self.add_piece("black", 'd8', "queen", variety)
-        self.add_piece("black", 'e8', "king", variety)
-        self.add_piece("black", 'f8', "bishop", variety)
-        self.add_piece("black", 'g8', "knight", variety)
-        self.add_piece("black", 'h8', "rook", variety)
-
-        btn.disabled = True
+            for j in (("white", '21'), ("black", '78')):
+                self.add_piece(j[0], chr(97 + i) + j[1][0], "pawn", variety)
+                self.add_piece(j[0], chr(97 + i)+j[1][1], ptype[i], variety)
 
     def piece_at(self, square):
         for i in self.pieces:
