@@ -117,8 +117,7 @@ class Piece(Widget):
     def remove_dots(self):
         for i in self.dots:
             self.parent.remove_widget(i)
-        for i in self.dots:
-            self.dots.remove(i)
+        self.dots.clear()
 
     def promote(self, piece2, move):
         board = App.get_running_app().board
@@ -135,6 +134,7 @@ class Piece(Widget):
         
     def destroy(self):
         self.updater.cancel()
+        self.remove_dots()
         self.parent.remove_widget(self)
 
 
