@@ -64,7 +64,7 @@ class ChessLayout(GridLayout):
         app = App.get_running_app()
         app.board = chess.Board()
         for i in self.pieces:
-            self.mainlayout.remove_widget(i)
+            i.destroy()
 
         ch = list(self.children)
         for i in ch:

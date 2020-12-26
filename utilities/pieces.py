@@ -22,7 +22,7 @@ class Piece(Widget):
         self.position = position
         self.active = False
         self.dots = []
-        Clock.schedule_interval(self.change, .1)
+        self.updater=Clock.schedule_interval(self.change, .1)
         # print("created")
 
     @property
@@ -132,6 +132,10 @@ class Piece(Widget):
         parent.remove_widget(self)
 
         parent.board.add_piece(self.color, move[2:4], piece2, variety=self.variety)
+        
+    def destroy(self):
+        self.updater.cancel()
+        self.parent.remove_widget(self)
 
 
 class Dot(Widget):
