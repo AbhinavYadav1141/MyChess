@@ -99,8 +99,7 @@ class Piece(Widget):
         board.push_san(mv)
         piece = parent.board.piece_at(mv[2:4])
         if piece is not None:
-            parent.board.pieces.remove(piece)
-            parent.remove_widget(piece)
+            piece.destroy()
         self.position = mv[2:4]
 
     def add_dots(self):
