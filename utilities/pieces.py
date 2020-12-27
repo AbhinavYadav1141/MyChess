@@ -1,7 +1,6 @@
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.lang import Builder
-import chess
 from kivy.clock import Clock
 
 Builder.load_file("utilities/pieces.kv")
@@ -22,7 +21,7 @@ class Piece(Widget):
         self.position = position
         self.active = False
         self.dots = []
-        self.updater=Clock.schedule_interval(self.change, .1)
+        self.updater = Clock.schedule_interval(self.change, 3)
         # print("created")
 
     @property
@@ -35,10 +34,11 @@ class Piece(Widget):
         self._position = position
         if self.parent is not None:
             self.change()
+
     '''
     def on_touch_down(self, touch):
         app = App.get_running_app()
-        board: chess.Board = app.board
+        board = self.parent.board.board
         parent = self.parent
         if parent is not None:
             if (self.color == 'white' and board.turn is True) or (self.color == 'black' and board.turn is False):
@@ -75,16 +75,18 @@ class Piece(Widget):
                     # print(self.pos)
             super().on_touch_down(touch)
 '''
+
     def change(self, *args):
         if self.parent is not None:
             block = eval(f"self.parent.board.{self.position}")
             self.pos = block.pos
             self.size = block.size
+            for i in self.dots:
+                i.change()
 
     def move(self, mv):
-        app = App.get_running_app()
         parent = self.parent
-        board: chess.Board = app.board
+        board = self.parent.board.board
         legal = board.legal_moves
         move = None
         for i in legal:
@@ -103,15 +105,17 @@ class Piece(Widget):
         self.position = mv[2:4]
 
     def add_dots(self):
-        app = App.get_running_app()
-        board: chess.Board = app.board
-        legal_pos = [str(i)[2:] for i in board.legal_moves if str(i)[0:2] == self.position]
-        for i in legal_pos:
-            if len(i) == 3:
-                i = i[:2]
-            dot = Dot(position=i)
-            self.parent.add_widget(dot)
-            self.dots.append(dot)
+        if self.parent is not None:
+            board = self.parent.board.board
+            legal_pos = [str(i)[2:] for i in board.legal_moves if str(i)[0:2] == self.position]
+
+            for i in legal_pos:
+                if len(i) == 3:
+                    i = i[:2]
+                block = self.parent.board.blocks[i]
+                dot = Dot(position=i, block=block)
+                self.parent.add_widget(dot)
+                self.dots.append(dot)
 
     def remove_dots(self):
         for i in self.dots:
@@ -119,7 +123,6 @@ class Piece(Widget):
         self.dots.clear()
 
     def promote(self, piece2, move):
-        board = App.get_running_app().board
         parent = self.parent
         move += "n" if piece2 == 'knight' else piece2[0]
         # self.ptype = piece
@@ -128,18 +131,24 @@ class Piece(Widget):
 
         parent.board.pieces.remove(self)
         parent.remove_widget(self)
-
         parent.board.add_piece(self.color, move[2:4], piece2, variety=self.variety)
-        
+
     def destroy(self):
         self.updater.cancel()
         self.remove_dots()
+        self.parent.board.pieces.remove(self)
         self.parent.remove_widget(self)
 
 
 class Dot(Widget):
 
-    def __init__(self, position, **kwargs):
+    def __init__(self, position, block, **kwargs):
         super().__init__(**kwargs)
 
         self.position = position
+        self.block = block
+        self.pos = (self.block.center_x - self.width / 2, self.block.center_y - self.height / 2)
+
+    def change(self):
+        if self.parent is not None:
+            self.pos = (self.block.center_x - self.width / 2, self.block.center_y - self.height / 2)

@@ -10,8 +10,8 @@ from kivy.uix.textinput import TextInput
 
 class MainScreen(Screen):
 
-    def start_offline(self, btn):
-        self.manager.current = "gamescreen"
+    def new_offline(self, btn):
+        self.manager.new_game()
 
     def start_online(self, btn, btn2):
         btn.parent.remove_widget(btn2)

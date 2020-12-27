@@ -1,13 +1,28 @@
 #: import Window kivy.core.window.Window
 #: import MainScreen screens.mainscreen.MainScreen
-#: import GameScreen screens.gamescreen.GameScreen
 
 
 <Manager>:
     mainscreen : mainscreen
-    gamescreen : gamescreen
     MainScreen:
         id: mainscreen
 
-    GameScreen:
-        id: gamescreen
+
+<MainLayout>:
+    orientation: "vertical" if Window.height > Window.width else "horizontal"
+    btns: btns
+
+    ScrollView:
+        size_hint: (1, .1) if Window.height > Window.width else (.1, 1)
+        BoxLayout:
+            id: btns
+            size_hint:(None, 1) if Window.height > Window.width else (1, None)
+            height: self.minimum_height
+            width: 100
+            orientation: "horizontal" if Window.height > Window.width else "vertical"
+
+
+<TGLButton>:
+    size_hint:(None, 1) if Window.height > Window.width else (1, None)
+    width: Window.width/6
+    height: Window.height/6

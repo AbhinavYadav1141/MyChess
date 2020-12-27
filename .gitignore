@@ -134,6 +134,7 @@ dmypy.json
 
 others/
 .kivy/
+test/
 
 #files
 resize.py

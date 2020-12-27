@@ -10,7 +10,6 @@
 
 
 <GameScreen>:
-    name: "gamescreen"
     board: board
     FloatLayout:
         id: mainlayout
@@ -21,6 +20,7 @@
 
             BoxLayout:
                 orientation: "horizontal" if Window.height > Window.width else "vertical"
+                size_hint: (1, .1) if Window.height > Window.width else (.1, 1)
                 Button:
                     text: "START"
                     on_release: board.start(self)
@@ -28,16 +28,19 @@
             BoxLayout:
                 id: game
                 orientation: "vertical"
-                size_hint: (None, None)
-                height: min(Window.height, Window.width)
-                width: self.height
+                # size_hint: (None, None)
+                # height: min(Window.height, Window.width)
+                # width: self.height
 
                 BoxLayout:
                     size_hint_y: .9
                     BoxLayout:
                         id: rank
                         orientation: "vertical"
-                        size_hint_x: .1
+                        size_hint_x: None
+                        width: Window.width*.08
+                        size_hint_y: None
+                        height: board.height
                         Label:
                             text: "8"
                         Label:
@@ -57,33 +60,42 @@
                     ChessLayout:
                         id: board
                         mainlayout: mainlayout
+                        size_hint: (None, None)
+                        height: min(game.width-rank.width, game.height-file.height)
+                        width: self.height
 
                 BoxLayout:
                     id: file
-                    size_hint_y: .1
-                    size_hint_x: None
-                    width: game.width * .9
-                    pos_hint: {"right": 1}
+                    size_hint_y: None
+                    height: game.height*.07
 
                     Label:
-                        text: "a"
-                    Label:
-                        text: "b"
-                    Label:
-                        text: "c"
-                    Label:
-                        text: "d"
-                    Label:
-                        text: "e"
-                    Label:
-                        text: "f"
-                    Label:
-                        text: "g"
-                    Label:
-                        text: "h"
+                        size_hint_x: None
+                        width: rank.width
+
+                    BoxLayout:
+                        size_hint_x: None
+                        width: board.width
+                        Label:
+                            text: "a"
+                        Label:
+                            text: "b"
+                        Label:
+                            text: "c"
+                        Label:
+                            text: "d"
+                        Label:
+                            text: "e"
+                        Label:
+                            text: "f"
+                        Label:
+                            text: "g"
+                        Label:
+                            text: "h"
 
 
             BoxLayout:
+                size_hint: (1, .1) if Window.height > Window.width else (.1, 1)
                 Button:
                     id: restart_btn
                     text: "RESTART"

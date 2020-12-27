@@ -30,6 +30,7 @@ class ChessLayout(GridLayout):
         self.pieces = []
         self.active = False
         self.active_piece = None
+        self.board = chess.Board()
 
         for i in range(7, -1, -1):
             for j in range(8):
@@ -61,8 +62,7 @@ class ChessLayout(GridLayout):
 
     def restart(self, btn):
         btn.disabled = True
-        app = App.get_running_app()
-        app.board = chess.Board()
+        self.board = chess.Board()
         for i in self.pieces:
             i.destroy()
 
@@ -96,9 +96,6 @@ class ChessLayout(GridLayout):
                 return i
 
     def on_touch_down(self, touch):
-        app = App.get_running_app()
-        board: chess.Board = app.board
-
         block = None
         piece = None
         active_piece = self.active_piece
@@ -120,11 +117,11 @@ class ChessLayout(GridLayout):
                     self.active_piece.add_dots()
         else:
             if block is not None:
-                legal_moves = [str(i) for i in board.legal_moves]
+                legal_moves = [str(i) for i in self.board.legal_moves]
                 move = active_piece.position + block.name
                 if move in legal_moves:
                     active_piece.move(move)
-                elif active_piece.ptype == "pawn":
+                elif active_piece.ptype == "pawn" and move in [i[:4] for i in legal_moves]:
 
                     if active_piece.position[1] == '7' and active_piece.color == "white" \
                             or active_piece.position[1] == '2' and active_piece.color == "black":
@@ -132,7 +129,7 @@ class ChessLayout(GridLayout):
 
             active_piece.remove_dots()
 
-            gameover = self.gameover(board)
+            gameover = self.gameover(self.board)
             if gameover[0]:
                 ResultPopup(result=gameover[1], reason=gameover[2], restart=self.restart).open()
 
