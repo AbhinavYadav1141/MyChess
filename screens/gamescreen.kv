@@ -60,6 +60,7 @@
                     ChessLayout:
                         id: board
                         mainlayout: mainlayout
+                        gamescreen: root
                         size_hint: (None, None)
                         height: min(game.width-rank.width, game.height-file.height)
                         width: self.height
@@ -96,9 +97,15 @@
 
             BoxLayout:
                 size_hint: (1, .1) if Window.height > Window.width else (.1, 1)
+                orientation: "vertical" if Window.height < Window.width else "horizontal"
                 Button:
                     id: restart_btn
                     text: "RESTART"
                     on_release:
                         board.restart(self)
                         self.disabled = False
+                Button:
+                    id: close_button
+                    text: "close"
+                    on_release:
+                        board.close(self)

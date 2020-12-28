@@ -3,17 +3,23 @@
 
 <MainScreen>:
     name: "mainscreen"
-    BoxLayout:
-        orientation: "vertical"
-        Button:
-            id: online_button
-            text: "Play Online"
-            on_press:
-                root.start_online(self, offline_button)
+    FloatLayout:
+        BoxLayout:
+            orientation: "vertical"
+            pos: (Window.width*.15, Window.height*.37) if Window.width<Window.height else (Window.width*.075, Window.height*.37)
+            Button:
+                id: online_button
+                size_hint: (None, None)
+                size: (Window.width*.7, Window.height*.13)
+                text: "Play Online"
+                on_press:
+                    root.start_online(self, offline_button)
 
-        Button:
-            id: offline_button
-            text: "New Offline"
-            on_press:
-                root.new_offline(self)
+            Button:
+                id: offline_button
+                size_hint: (None, None)
+                size: (Window.width*.7, Window.height*.13)
+                text: "New Offline"
+                on_press:
+                    root.new_offline(self)
 

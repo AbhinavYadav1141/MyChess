@@ -31,6 +31,7 @@ class ChessLayout(GridLayout):
         self.active = False
         self.active_piece = None
         self.board = chess.Board()
+        self.mode = None     # Offline or Online
 
         for i in range(7, -1, -1):
             for j in range(8):
@@ -161,6 +162,18 @@ class ChessLayout(GridLayout):
             reason = "Variant draw"
 
         return check, result, reason
+
+    def close(self, btn):
+        btn.disabled = True
+        gm = self.gamescreen
+        gm.manager.l2.remove_widget(gm.btn)
+        gm.manager.games.remove(gm)
+        if len(gm.manager.games) == 0:
+            gm.manager.l2.remove_widget(gm.manager.home_btn)
+        else:
+            gm.manager.current = f"gamescreen{int(gm.name[-1])+1}" \
+                if gm.name[-1] == '1' else f"gamescreen{int(gm.name[-1])-1}"
+        gm.manager.remove_widget(gm)
 
 
 class GameScreen(Screen):

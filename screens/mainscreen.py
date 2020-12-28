@@ -14,12 +14,14 @@ class MainScreen(Screen):
         self.manager.new_game()
 
     def start_online(self, btn, btn2):
+        self.go(btn)
+        '''
         btn.parent.remove_widget(btn2)
         btn.parent.add_widget(Label(text="Enter Code"))
         tin = TextInput()
         btn.parent.add_widget(tin)
         btn.parent.add_widget(Button(text="Go", on_press=self.go))
-        btn.parent.remove_widget(btn)
+        btn.parent.remove_widget(btn)'''
 
     def go(self, btn):
         Popup(size_hint=(None, None), size=(Window.width/2, Window.height/2),
