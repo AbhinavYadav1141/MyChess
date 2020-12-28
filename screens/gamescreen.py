@@ -63,7 +63,8 @@ class ChessLayout(GridLayout):
     def restart(self, btn):
         btn.disabled = True
         self.board = chess.Board()
-        for i in self.pieces:
+        pieces = list(self.pieces)
+        for i in pieces:
             i.destroy()
 
         ch = list(self.children)
@@ -76,7 +77,6 @@ class ChessLayout(GridLayout):
                 exec(f"del self.{name}")
 
         self.blocks = {}
-        self.pieces = []
         self.active = False
         self.active_piece = None
 
