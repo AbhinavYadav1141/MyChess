@@ -1,10 +1,13 @@
 from kivy.app import App
+from kivy.clock import Clock
+from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.togglebutton import ToggleButton
 from screens.gamescreen import GameScreen
+from utilities.popups import ConfirmPopup
 
 Builder.load_file("main.kv")
 
@@ -60,18 +63,33 @@ class Manager(ScreenManager):
 
 
 class ChessApp(App):
-    manager = Manager()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+        self.manager = None
         self.layout = MainLayout(orientation="vertical")
-        self.manager.l2 = self.layout.btns
+        Clock.schedule_once(self.init)
 
+    def init(self, dt):
+
+        self.manager = Manager()
+        self.manager.l2 = self.layout.btns
         self.layout.add_widget(self.manager)
 
     def build(self):
+        Window.bind(on_keyboard=self._keyboard_down)
         return self.layout
+
+    def _keyboard_down(self, window, keycode1, keycode2, text, modifiers):
+        if keycode1 == 27:
+            if self.manager.current == 'mainscreen':
+                ConfirmPopup(msg="Do you really want to quit?", yes_pressed=self.stop).open()
+            else:
+                self.manager.home_btn.trigger_action(.01)
+            return True
+
+        return False
 
 
 if __name__ == "__main__":

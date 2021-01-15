@@ -1,7 +1,5 @@
-from kivy.app import App
 from kivy.uix.popup import Popup
 from kivy.lang import Builder
-
 
 Builder.load_file("utilities/popups.kv")
 
@@ -25,4 +23,16 @@ class ResData:
 
 
 class ResultPopup(Popup, ResData):
+    pass
+
+
+class ConData:
+    def __init__(self, msg='', yes_pressed=print, no_pressed=print, dismiss_on_press=True):
+        self.msg = msg
+        self.yes_pressed = yes_pressed
+        self.no_pressed = no_pressed
+        self.dismiss_on_press = dismiss_on_press
+
+
+class ConfirmPopup(Popup, ConData):
     pass

@@ -91,7 +91,7 @@ class ChessLayout(GridLayout):
 
         self.start(btn)
 
-    def piece_at(self, square):
+    def piece_at(self, square: str):
         for i in self.pieces:
             if i.position == square:
                 return i
@@ -127,6 +127,14 @@ class ChessLayout(GridLayout):
                     if active_piece.position[1] == '7' and active_piece.color == "white" \
                             or active_piece.position[1] == '2' and active_piece.color == "black":
                         PromotionPopup(move=move, piece=active_piece).open()
+                else:
+                    piece = self.piece_at(block.name)
+                    if piece is not None:
+                        active_piece.remove_dots()
+                        self.active_piece = piece
+                        self.active_piece.add_dots()
+                        super().on_touch_down(touch)
+                        return
 
             active_piece.remove_dots()
 

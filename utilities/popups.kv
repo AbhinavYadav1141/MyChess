@@ -62,4 +62,27 @@
             on_release:
                 root.restart(self)
                 root.dismiss()
-        
+
+<ConfirmPopup>:
+    title: "Confirm?"
+    size_hint: (None, None)
+    height: min(Window.height, Window.width)*.8
+    width: self.height
+    BoxLayout:
+        orientation: "vertical"
+
+        Label:
+            text: "" if self.parent is None else root.msg
+
+        BoxLayout:
+            Button:
+                text: "Yes"
+                on_release:
+                    root.yes_pressed(self)
+                    root.dismiss() if root.dismiss_on_press else ""
+
+            Button:
+                text: "No"
+                on_release:
+                    root.no_pressed(self)
+                    root.dismiss() if root.dismiss_on_press else ""
