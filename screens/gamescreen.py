@@ -31,7 +31,8 @@ class ChessLayout(GridLayout):
         self.active = False
         self.active_piece = None
         self.board = chess.Board()
-        self.mode = None     # Offline or Online
+        self.mode = "Offline"  # Offline or Online
+        self.color = None  # For online mode
 
         for i in range(7, -1, -1):
             for j in range(8):
@@ -97,12 +98,21 @@ class ChessLayout(GridLayout):
                 return i
 
     def on_touch_down(self, touch):
+        if self.mode == "Offline" or (
+                                      self.mode == "Online" and
+                                      ((self.board.turn and self.color == 'white') or
+                                       not self.board.turn and self.color == 'black')
+                                      ):
+            self.move_self(touch.pos)
+        super().on_touch_down(touch)
+
+    def move_self(self, pos):
         block = None
         piece = None
         active_piece = self.active_piece
 
         for i in self.blocks:
-            if self.blocks[i].collide_point(*touch.pos):
+            if self.blocks[i].collide_point(*pos):
                 block = self.blocks[i]
                 break
 
@@ -133,18 +143,25 @@ class ChessLayout(GridLayout):
                         active_piece.remove_dots()
                         self.active_piece = piece
                         self.active_piece.add_dots()
-                        super().on_touch_down(touch)
                         return
 
             active_piece.remove_dots()
+
+            self.active = False
+            self.active_piece = None
 
             gameover = self.gameover(self.board)
             if gameover[0]:
                 ResultPopup(result=gameover[1], reason=gameover[2], restart=self.restart).open()
 
-            self.active = False
-            self.active_piece = None
-        super().on_touch_down(touch)
+    def move_other(self, move):   # for online mode only
+        position = move[0:2]
+        piece = self.piece_at(position)
+        piece.move(move) if len(move) == 4 else piece.promote(move)
+
+        gameover = self.gameover(self.board)
+        if gameover[0]:
+            ResultPopup(result=gameover[1], reason=gameover[2], restart=self.restart).open()
 
     def gameover(self, board):
         reason = ""
@@ -179,8 +196,8 @@ class ChessLayout(GridLayout):
         if len(gm.manager.games) == 0:
             gm.manager.l2.remove_widget(gm.manager.home_btn)
         else:
-            gm.manager.current = f"gamescreen{int(gm.name[-1])+1}" \
-                if gm.name[-1] == '1' else f"gamescreen{int(gm.name[-1])-1}"
+            gm.manager.current = f"gamescreen{int(gm.name[-1]) + 1}" \
+                if gm.name[-1] == '1' else f"gamescreen{int(gm.name[-1]) - 1}"
         gm.manager.remove_widget(gm)
 
 

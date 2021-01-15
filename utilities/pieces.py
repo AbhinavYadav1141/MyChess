@@ -122,15 +122,16 @@ class Piece(Widget):
             self.parent.remove_widget(i)
         self.dots.clear()
 
-    def promote(self, piece2, move):
+    def promote(self, piece, move):
         parent = self.parent
-        move += "n" if piece2 == 'knight' else piece2[0]
+        if len(move) == 4:
+            move += "n" if piece == 'knight' else piece[0]
         # self.ptype = piece
 
         self.move(move)
 
         self.destroy()
-        parent.board.add_piece(self.color, move[2:4], piece2, variety=self.variety)
+        parent.board.add_piece(self.color, move[2:4], piece, variety=self.variety)
 
     def destroy(self):
         self.updater.cancel()
